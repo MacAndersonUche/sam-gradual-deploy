@@ -58,6 +58,7 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       MetricName: experimentMetricFilter
+      Namespace: 'API/Lambda/TestAPIAlarms'
       Period: 60
       Statistic: Sum
       Threshold: '1'
