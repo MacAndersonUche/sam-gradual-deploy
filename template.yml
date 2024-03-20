@@ -27,10 +27,8 @@ Resources:
 
   ExperimentGetFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: nodejs18.x
     Properties:
-      FunctionName: 'experiment-get'
+      FunctionName: 'sam-deploy-lambda1'
       Handler: dist/handlers/test.handler
       Description: Makes sure the api key used is valid
       Events:
@@ -40,3 +38,27 @@ Resources:
             Path: /v1/test
             Method: GET
             RestApiId: !Ref ExperimentApi
+
+  experimentMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: '?"[ERROR]" ?"timed out"'
+      LogGroupName: '/aws/lambda/sam-deploy-lambda1'
+      MetricTransformations:
+        - MetricValue: '1'
+          MetricNamespace: 'API/Lambda/TestAPIAlarms'
+          MetricName: experimentMetricFilter
+
+  apiAdminDeviceCreateFunctionAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: sam-deploy-lambda1-Function
+      AlarmActions:
+        - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: experimentMetricFilter
+      MetricNamespace: 'API/Lambda/TestAPIAlarms'
+      Period: 60
+      Statistic: Sum
+      Threshold: '1'
