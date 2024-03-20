@@ -22,14 +22,18 @@ const main = async (id: string) => {
 export const handler = async (event: APIGatewayEvent) => {
   try {
     console.log('SourceIP =', event.requestContext.identity.sourceIp);
-    // const { id }: { id: string } = JSON.parse(event.body!);
+    const { id }: { id: string } = JSON.parse(event.body!);
 
     // await main(id);
 
     // throw Error('ERROR');
     return {
       statusCode: 200,
-      body: JSON.stringify({ hi: 'here' }),
+      body: JSON.stringify({
+        hi: 'here',
+        id,
+        sourceIp: event.requestContext.identity.sourceIp,
+      }),
     };
   } catch (e) {
     console.log(e);
