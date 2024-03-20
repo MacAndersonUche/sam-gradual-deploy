@@ -26,10 +26,11 @@ export const handler = async (event: APIGatewayEvent) => {
 
     // await main(id);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ hi: 'here' }),
-    };
+    throw Error('ERROR');
+    // return {
+    //   statusCode: 200,
+    //   body: JSON.stringify({ hi: 'here' }),
+    // };
   } catch (e) {
     console.log(e);
   }
