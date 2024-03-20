@@ -9,6 +9,7 @@ Globals:
     Timeout: 120
     Runtime: nodejs20.x
     Tracing: Active
+    AutoPublishAlias: live
     DeploymentPreference:
       Enabled: true
       Type: Canary10Percent30Minutes
