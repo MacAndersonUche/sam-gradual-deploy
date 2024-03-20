@@ -86,7 +86,6 @@ Resources:
   # # CW Alarm to monitor the new Lambda version for errors
   LatestVersionErrorMetricGreaterThanZeroAlarm:
     Type: AWS::CloudWatch::Alarm
-    DependsOn: HelloWorldFunction
     Properties:
       AlarmName: aahelloworld-safemode-latestversion
       AlarmDescription: 'pre-deployment alarm to check for errors in the function'
