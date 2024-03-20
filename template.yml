@@ -8,6 +8,14 @@ Globals:
     MemorySize: 1048
     Timeout: 120
     Runtime: nodejs20.x
+    Tracing: Active
+    DeploymentPreference:
+      Enabled: true
+      Type: Canary10Percent30Minutes
+      Alarms:
+        # A list of alarms that you want to monitor
+        - !Ref AliasErrorMetricGreaterThanZeroAlarm
+        - !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
     Environment:
       Variables:
         NODE_OPTIONS: --enable-source-maps
@@ -38,30 +46,6 @@ Resources:
             Path: /v1/test
             Method: GET
             RestApiId: !Ref ExperimentApi
-
-  # experimentMetricFilter:
-  #   Type: AWS::Logs::MetricFilter
-  #   Properties:
-  #     FilterPattern: '?"[ERROR]" ?"timed out"'
-  #     LogGroupName: '/aws/lambda/sam-deploy-lambda1'
-  #     MetricTransformations:
-  #       - MetricValue: '1'
-  #         MetricNamespace: 'API/Lambda/TestAPIAlarms'
-  #         MetricName: experimentMetricFilter
-
-  # experimentFunctionAlarm:
-  #   Type: AWS::CloudWatch::Alarm
-  #   Properties:
-  #     AlarmDescription: sam-deploy-lambda1-Function
-  #     AlarmActions:
-  #       - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
-  #     ComparisonOperator: GreaterThanOrEqualToThreshold
-  #     EvaluationPeriods: 1
-  #     MetricName: experimentMetricFilter
-  #     Namespace: 'API/Lambda/TestAPIAlarms'
-  #     Period: 60
-  #     Statistic: Sum
-  #     Threshold: '1'
 
   # CW Alarm to monitor the new Lambda version for errors
   AliasErrorMetricGreaterThanZeroAlarm:
