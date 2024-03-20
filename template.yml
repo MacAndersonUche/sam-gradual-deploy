@@ -63,6 +63,50 @@ Resources:
   #     Statistic: Sum
   #     Threshold: '1'
 
+
+    # CW Alarm to monitor the new Lambda version for errors
+  # AliasErrorMetricGreaterThanZeroAlarm:
+  #   Type: AWS::CloudWatch::Alarm
+  #   DependsOn: HelloWorldFunction
+  #   Properties:
+  #     AlarmName: !Sub aahelloworld-safemode-alias-${HelloWorldFunction}
+  #     AlarmDescription: "pre-deployment alarm to check for errors in the function"
+  #     #AlarmActions:
+  #     #  - !Ref AlarmTopic
+  #     ComparisonOperator: GreaterThanOrEqualToThreshold
+  #     Dimensions:
+  #       - Name: FunctionName
+  #         Value: !Ref HelloWorldFunction
+  #     EvaluationPeriods: 1
+  #     MetricName: Errors
+  #     Namespace: AWS/Lambda
+  #     Period: '60'
+  #     Statistic: Sum
+  #     Threshold: '1'
+
+  # # CW Alarm to monitor the new Lambda version for errors
+  # LatestVersionErrorMetricGreaterThanZeroAlarm:
+  #   Type: AWS::CloudWatch::Alarm
+  #   DependsOn: HelloWorldFunction
+  #   Properties:
+  #     AlarmName: !Sub aahelloworld-safemode-latestversion-${HelloWorldFunction}
+  #     AlarmDescription: "pre-deployment alarm to check for errors in the function"
+  #     #AlarmActions:
+  #     #  - !Ref AlarmTopic
+  #     ComparisonOperator: GreaterThanOrEqualToThreshold
+  #     TreatMissingData: missing
+  #     Dimensions:
+  #       - Name: FunctionName
+  #         Value: !Ref HelloWorldFunction
+  #       - Name: Resource
+  #         Value: !Join [":", [!Ref HelloWorldFunction, !Select ["7", !Split [":", !Ref HelloWorldFunction.Version]]]]
+  #     EvaluationPeriods: 1
+  #     MetricName: Errors
+  #     Namespace: AWS/Lambda
+  #     Period: '60'
+  #     Statistic: Sum
+  #     Threshold: '1'
+
 Outputs:
   ApiDefaultEndpoint:
     Description: 'API Gateway default URL'
