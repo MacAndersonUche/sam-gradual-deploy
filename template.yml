@@ -29,7 +29,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: 'sam-deploy-lambda1'
-      Handler: dist/handlers/test.handler
+      Handler: dist/handlers/index.handler
       Description: Makes sure the api key used is valid
       Events:
         TestGetDevice:
@@ -63,8 +63,7 @@ Resources:
   #     Statistic: Sum
   #     Threshold: '1'
 
-
-    # CW Alarm to monitor the new Lambda version for errors
+  # CW Alarm to monitor the new Lambda version for errors
   # AliasErrorMetricGreaterThanZeroAlarm:
   #   Type: AWS::CloudWatch::Alarm
   #   DependsOn: HelloWorldFunction

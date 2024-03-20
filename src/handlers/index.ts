@@ -21,9 +21,9 @@ const main = async (id: string) => {
 
 export const handler = async (event: APIGatewayEvent) => {
   try {
-    const { id }: { id: string } = JSON.parse(event.body!);
+    // const { id }: { id: string } = JSON.parse(event.body!);
 
-    await main(id);
+    // await main(id);
 
     return {
       status: 200,
