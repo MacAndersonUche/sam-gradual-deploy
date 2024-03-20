@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-gradual-deploy
+
+Globals:
+  Function:
+    MemorySize: 1048
+    Timeout: 120
+    Runtime: nodejs20.x
+    Environment:
+      Variables:
+        NODE_OPTIONS: --enable-source-maps
+        DEVICES_TABLE: devices
+        API_KEYS_TABLE: api_keys
+        CUSTOMERS_TABLE: customers
+
+Resources:
+  ExperimentApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
+        AllowOrigin: "'*'"
+
+  ExperimentGetFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: nodejs18.x
+    Properties:
+      FunctionName: 'experiment-get'
+      Handler: dist/handlers/test.handler
+      Description: Makes sure the api key used is valid
+      Events:
+        TestGetDevice:
+          Type: Api
+          Properties:
+            Path: /v1/test
+            Method: GET
+            RestApiId: !Ref ExperimentApi

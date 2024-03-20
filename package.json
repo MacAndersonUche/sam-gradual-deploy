@@ -1,0 +1,29 @@
+{
+  "name": "sam-gradual-deploy",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.515.0",
+    "@aws-sdk/lib-dynamodb": "^3.515.0",
+    "@types/aws-lambda": "^8.10.101",
+    "@types/node": "^16.11.7",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4"
+  },
+  "scripts": {
+    "prettify": "npx prettier --write .",
+    "start-clear": "rm -rf .aws-sam",
+    "start-sam": "sam local start-api -n local.json -p 3003  --log-file log.txt",
+    "start-ts": "node node_modules/typescript/bin/tsc -w --preserveWatchOutput",
+    "start": "npm-run-all --parallel start-clear start-ts start-sam",
+    "build": "node node_modules/typescript/bin/tsc",
+    "build-test": "node node_modules/typescript/bin/tsc --noEmit",
+    "run": "node dist/index.js",
+    "test": "jest",
+    "clear": "rm -r dist",
+    "preparepush": "npm run clear && npm run prettify"
+  },
+  "devDependencies": {}
+}
