@@ -84,27 +84,22 @@ Resources:
   #     Threshold: '1'
 
   # # CW Alarm to monitor the new Lambda version for errors
-  # LatestVersionErrorMetricGreaterThanZeroAlarm:
-  #   Type: AWS::CloudWatch::Alarm
-  #   DependsOn: HelloWorldFunction
-  #   Properties:
-  #     AlarmName: !Sub aahelloworld-safemode-latestversion-${HelloWorldFunction}
-  #     AlarmDescription: "pre-deployment alarm to check for errors in the function"
-  #     #AlarmActions:
-  #     #  - !Ref AlarmTopic
-  #     ComparisonOperator: GreaterThanOrEqualToThreshold
-  #     TreatMissingData: missing
-  #     Dimensions:
-  #       - Name: FunctionName
-  #         Value: !Ref HelloWorldFunction
-  #       - Name: Resource
-  #         Value: !Join [":", [!Ref HelloWorldFunction, !Select ["7", !Split [":", !Ref HelloWorldFunction.Version]]]]
-  #     EvaluationPeriods: 1
-  #     MetricName: Errors
-  #     Namespace: AWS/Lambda
-  #     Period: '60'
-  #     Statistic: Sum
-  #     Threshold: '1'
+  LatestVersionErrorMetricGreaterThanZeroAlarm:
+    Type: AWS::CloudWatch::Alarm
+    DependsOn: HelloWorldFunction
+    Properties:
+      AlarmName: aahelloworld-safemode-latestversion
+      AlarmDescription: 'pre-deployment alarm to check for errors in the function'
+      AlarmActions:
+        - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: missing
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: API/Lambda/TestAPIAlarms
+      Period: '60'
+      Statistic: Sum
+      Threshold: '1'
 
 Outputs:
   ApiDefaultEndpoint:
