@@ -39,26 +39,31 @@ Resources:
             Method: GET
             RestApiId: !Ref ExperimentApi
 
-  experimentMetricFilter:
-    Type: AWS::Logs::MetricFilter
-    Properties:
-      FilterPattern: '?"[ERROR]" ?"timed out"'
-      LogGroupName: '/aws/lambda/sam-deploy-lambda1'
-      MetricTransformations:
-        - MetricValue: '1'
-          MetricNamespace: 'API/Lambda/TestAPIAlarms'
-          MetricName: experimentMetricFilter
+  # experimentMetricFilter:
+  #   Type: AWS::Logs::MetricFilter
+  #   Properties:
+  #     FilterPattern: '?"[ERROR]" ?"timed out"'
+  #     LogGroupName: '/aws/lambda/sam-deploy-lambda1'
+  #     MetricTransformations:
+  #       - MetricValue: '1'
+  #         MetricNamespace: 'API/Lambda/TestAPIAlarms'
+  #         MetricName: experimentMetricFilter
 
-  experimentFunctionAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: sam-deploy-lambda1-Function
-      AlarmActions:
-        - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 1
-      MetricName: experimentMetricFilter
-      Namespace: 'API/Lambda/TestAPIAlarms'
-      Period: 60
-      Statistic: Sum
-      Threshold: '1'
+  # experimentFunctionAlarm:
+  #   Type: AWS::CloudWatch::Alarm
+  #   Properties:
+  #     AlarmDescription: sam-deploy-lambda1-Function
+  #     AlarmActions:
+  #       - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
+  #     ComparisonOperator: GreaterThanOrEqualToThreshold
+  #     EvaluationPeriods: 1
+  #     MetricName: experimentMetricFilter
+  #     Namespace: 'API/Lambda/TestAPIAlarms'
+  #     Period: 60
+  #     Statistic: Sum
+  #     Threshold: '1'
+
+Outputs:
+  ApiDefaultEndpoint:
+    Description: 'API Gateway default URL'
+    Value: !Sub 'https://${ExperimentApi}.execute-api.${AWS::Region}.amazonaws.com/prod/'
