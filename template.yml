@@ -49,7 +49,7 @@ Resources:
           MetricNamespace: 'API/Lambda/TestAPIAlarms'
           MetricName: experimentMetricFilter
 
-  apiAdminDeviceCreateFunctionAlarm:
+  experimentFunctionAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmDescription: sam-deploy-lambda1-Function
@@ -58,7 +58,6 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 1
       MetricName: experimentMetricFilter
-      MetricNamespace: 'API/Lambda/TestAPIAlarms'
       Period: 60
       Statistic: Sum
       Threshold: '1'
