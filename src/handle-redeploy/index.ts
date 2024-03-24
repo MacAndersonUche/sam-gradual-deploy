@@ -8,7 +8,7 @@ export const handler = async (event: SQSEvent) => {
 
     const projectName = body.detail['project-name'] as string;
 
-    await handleGithub(projectName);
+    // await handleGithub(projectName);
 
     await createBuildClient(projectName);
 
