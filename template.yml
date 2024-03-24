@@ -10,13 +10,6 @@ Globals:
     Runtime: nodejs20.x
     Tracing: Active
     AutoPublishAlias: live
-    DeploymentPreference:
-      Enabled: true
-      Type: Canary10Percent30Minutes
-      Alarms:
-        # A list of alarms that you want to monitor
-        - !Ref AliasErrorMetricGreaterThanZeroAlarm
-        - !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
     Environment:
       Variables:
         NODE_OPTIONS: --enable-source-maps
@@ -47,39 +40,6 @@ Resources:
             Path: /v1/test
             Method: GET
             RestApiId: !Ref ExperimentApi
-
-  # CW Alarm to monitor the new Lambda version for errors
-  AliasErrorMetricGreaterThanZeroAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: aahelloworld-safemode-alias
-      AlarmDescription: 'pre-deployment alarm to check for errors in the function'
-      AlarmActions:
-        - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topi
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 1
-      MetricName: Errors
-      Namespace: API/Lambda/TestAPIAlarms
-      Period: '60'
-      Statistic: Sum
-      Threshold: '1'
-
-  # # CW Alarm to monitor the new Lambda version for errors
-  LatestVersionErrorMetricGreaterThanZeroAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: aahelloworld-safemode-latestversion
-      AlarmDescription: 'pre-deployment alarm to check for errors in the function'
-      AlarmActions:
-        - arn:aws:sns:eu-west-2:725638684424:Default_CloudWatch_Alarms_Topic
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: missing
-      EvaluationPeriods: 1
-      MetricName: Errors
-      Namespace: API/Lambda/TestAPIAlarms
-      Period: '60'
-      Statistic: Sum
-      Threshold: '1'
 
 Outputs:
   ApiDefaultEndpoint:
