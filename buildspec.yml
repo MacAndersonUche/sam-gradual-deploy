@@ -1,8 +1,8 @@
 version: 0.2
 
-env:
-  parameter-store:
-    GITHUB_ACCESS_TOKEN: '/service/mac-github-token'
+# env:
+#   parameter-store:
+#     GITHUB_ACCESS_TOKEN: '/service/mac-github-token'
 
 phases:
   install:
@@ -21,16 +21,16 @@ phases:
       - aws cloudformation package --template template.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --output-template template-export.yml
   post_build:
     on-failure: ABORT
-    # commands:
-    # Deploy the new stack replacing all the code etc
-    # - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
-    # - npm run test
-    steps:
-      - id: fetch-latest-release
-        uses: thebritican/fetch-latest-release@v1
-        with:
-          github_token: $GITHUB_ACCESS_TOKEN
-      ## IF Test passes create tag??
+    commands:
+      # Deploy the new stack replacing all the code etc
+      - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
+      - npm run test
+    # steps:
+    #   - id: fetch-latest-release
+    #     uses: thebritican/fetch-latest-release@v1
+    #     with:
+    #       github_token: $GITHUB_ACCESS_TOKEN
+    ## IF Test passes create tag??
 artifacts:
   type: zip
   files:
