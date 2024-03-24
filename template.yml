@@ -9,27 +9,12 @@ Globals:
     Timeout: 60
     Runtime: nodejs20.x
     Tracing: Active
-    Environment:
-      Variables:
-        NODE_OPTIONS: --enable-source-maps
-        DEVICES_TABLE: devices
-        API_KEYS_TABLE: api_keys
-        CUSTOMERS_TABLE: customers
 
 Resources:
   FailureSQS:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 120
-
-  ExperimentApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: dev
-      Cors:
-        AllowMethods: "'GET,POST,OPTIONS,PUT,DELETE'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
-        AllowOrigin: "'*'"
 
   # Define the SNS topic
   CodebuildFailureTopic:
@@ -58,25 +43,11 @@ Resources:
       Queues:
         - Ref: FailureSQS
 
-  ExperimentGetFunction:
+  TriggerRebuild:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: 'sam-deploy-lambda1'
-      Handler: dist/handlers/handle-test/index.handler
-      Description: Makes sure the api key used is valid
-      Events:
-        TestGetDevice:
-          Type: Api
-          Properties:
-            Path: /v1/test
-            Method: GET
-            RestApiId: !Ref ExperimentApi
-
-  RevertAndMergeMRAndTriggerRebuild:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: 'revert-and-trigger-rebuild'
-      Handler: dist/handlers/handle-deploy/index.handler
+      FunctionName: trigger-rebuild
+      Handler: dist/handlers/handle-redeploy/index.handler
       Description: Makes sure the api key used is valid
       Policies:
         - Statement:
@@ -95,7 +66,20 @@ Resources:
             Queue: !GetAtt FailureSQS.Arn
             BatchSize: 1
 
-Outputs:
-  ApiDefaultEndpoint:
-    Description: 'API Gateway default URL'
-    Value: !Sub 'https://${ExperimentApi}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+  # MyNewEventsRule:
+  #   Type: 'AWS::Events::Rule'
+  #   Properties:
+  #     Description: Test Events Rule
+  #     Name: mynewabc
+  #     EventPattern:
+  #       source:
+  #         - aws.ec2
+  #     State: ENABLED
+  #     Targets:
+  #       - Arn: 'arn:aws:sqs:us-west-2:081035103721:demoSQS'
+  #         Id: Id1234
+  #         RetryPolicy:
+  #           MaximumRetryAttempts: 4
+  #           MaximumEventAgeInSeconds: 400
+  #         DeadLetterConfig:
+  #           Arn: 'arn:aws:sqs:us-west-2:081035103721:demoDLQ'

@@ -25,7 +25,6 @@
     "run": "node dist/index.js",
     "compile": "tsc",
     "test": "vitest --config ./vitest-config.mts",
-    "clear": "rm -r dist",
-    "preparepush": "npm run clear && npm run prettify"
+    "clear": "rm -r dist"
   }
 }
