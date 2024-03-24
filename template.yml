@@ -27,6 +27,22 @@ Resources:
         AllowHeaders: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
         AllowOrigin: "'*'"
 
+  # Define the SNS topic
+  CodebuildFailureTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt RevertAndMergeMRAndTriggerRebuild.Arn
+
+  # Provide permission for SNS to invoke the Lambda function
+  CodebuildFailurePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref RevertAndMergeMRAndTriggerRebuild
+      Principal: sns.amazonaws.com
+
   ExperimentGetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -40,6 +56,13 @@ Resources:
             Path: /v1/test
             Method: GET
             RestApiId: !Ref ExperimentApi
+
+  RevertAndMergeMRAndTriggerRebuild:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: 'revert-and-trigger-rebuild'
+      Handler: dist/handlers/revert/index.handler
+      Description: Makes sure the api key used is valid
 
 Outputs:
   ApiDefaultEndpoint:

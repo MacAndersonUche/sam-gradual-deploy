@@ -1,6 +1,7 @@
 import {
   CodeBuildClient,
   ListBuildBatchesForProjectCommand,
+  ListBuildsCommand,
   ListBuildsForProjectCommand,
   RetryBuildCommand,
   SortOrderType,
@@ -13,12 +14,24 @@ const input = {
   projectName: 'TestProject',
   sortOrder: SortOrderType.DESCENDING,
 };
+const list = {
+  // ListBuildsInput
+  sortOrder: SortOrderType.DESCENDING,
+  filter: {
+    // BuildBatchFilter
+    status: StatusType.FAILED,
+  },
+};
 const retryInput = {
   // ListBuildsInput
   id: 'TestProject:3dd0dfb1-5ef5-4e6f-9414-f63ecd9dfbab',
 };
 async function name() {
   const command = new ListBuildsForProjectCommand(input);
+  return await client.send(command);
+}
+async function listbuilds() {
+  const command = new ListBuildsCommand(list);
   return await client.send(command);
 }
 async function retry() {
