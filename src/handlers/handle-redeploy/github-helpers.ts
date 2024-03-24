@@ -85,5 +85,5 @@ export async function handleGithub(repoName: string) {
 
   console.log({ merged: JSON.stringify(merged) });
 
-  return merged === 'closed' ? true : false;
+  return merged === 'MERGED' ? true : false;
 }
