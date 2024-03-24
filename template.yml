@@ -68,7 +68,7 @@ Resources:
         MySQSEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt DirectSQS.Arn
+            Queue: !GetAtt FailureSQS.Arn
             BatchSize: 1
 
   # Allow EventBridge to invoke SQS
@@ -99,6 +99,9 @@ Resources:
           completed-phase-status:
             - STOPPED
             - FAILED
+            - TIMED_OUT
+            - FAULT
+            - CLIENT_ERROR
           project-name:
             - TestProject
       State: ENABLED
