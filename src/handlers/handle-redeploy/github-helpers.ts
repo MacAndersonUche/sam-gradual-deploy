@@ -67,8 +67,6 @@ async function mergeRevertedPullRequestByID(id: string) {
 
   const responseData = await graphqlClient(graphqlQuery);
 
-  console.log({ responseData });
-
   return responseData;
 }
 
@@ -79,7 +77,7 @@ export async function handleGithub(repoName: string) {
 
   const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
 
-  console.log({ merged });
+  console.log({ merged: JSON.stringify(merged) });
 
   return merged === 'closed' ? true : false;
 }
