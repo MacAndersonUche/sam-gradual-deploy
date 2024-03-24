@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-codebuild": "^3.540.0",
     "@aws-sdk/client-dynamodb": "^3.515.0",
     "@aws-sdk/lib-dynamodb": "^3.515.0",
     "@types/aws-lambda": "^8.10.101",
@@ -26,6 +27,5 @@
     "test": "vitest --config ./vitest-config.mts",
     "clear": "rm -r dist",
     "preparepush": "npm run clear && npm run prettify"
-  },
-  "devDependencies": {}
+  }
 }
