@@ -1,5 +1,5 @@
 import { SNSEvent } from 'aws-lambda';
-import { handleGithub } from './github-helpers';
+import { handleGithub } from './helpers';
 require('dotenv').config();
 
 export const handler = async (event: SNSEvent) => {
@@ -18,6 +18,8 @@ export const handler = async (event: SNSEvent) => {
       statusCode: 200,
       body: JSON.stringify({
         hi: 'here',
+        // id,
+        // message: 'still showing',
       }),
     };
   } catch (e) {
