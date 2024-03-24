@@ -11,42 +11,18 @@ Globals:
     Tracing: Active
 
 Resources:
-  DirectSQS:
+  CodebuildEventRuleSQS:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 120
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt CodebuildEventRuleDLQ.Arn
+        maxReceiveCount: 2
 
-  DirectSQSDLQ:
+  CodebuildEventRuleDLQ:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 120
-
-  # Define the SNS topic
-  # CodebuildFailureTopic:
-  #   Type: AWS::SNS::Topic
-  #   Properties:
-  #     Subscription:
-  #       - Protocol: sqs
-  #         Endpoint: !GetAtt FailureSQS.Arn
-
-  # Policy allows SNS to publish to this SQS queue
-  # SnsToSqsPolicy:
-  #   Type: AWS::SQS::QueuePolicy
-  #   Properties:
-  #     PolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #         - Sid: 'Allow SNS publish to SQS'
-  #           Effect: Allow
-  #           Principal:
-  #             Service: 'sns.amazonaws.com'
-  #           Resource: !GetAtt FailureSQS.Arn
-  #           Action: SQS:SendMessage
-  #           Condition:
-  #             ArnEquals:
-  #               aws:SourceArn: !Ref CodebuildFailureTopic
-  #     Queues:
-  #       - Ref: FailureSQS
 
   TriggerRebuild:
     Type: AWS::Serverless::Function
@@ -68,7 +44,7 @@ Resources:
         MySQSEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt DirectSQS.Arn
+            Queue: !GetAtt CodebuildEventRuleSQS.Arn
             BatchSize: 1
 
   # Allow EventBridge to invoke SQS
@@ -81,15 +57,15 @@ Resources:
             Principal:
               Service: events.amazonaws.com
             Action: SQS:SendMessage
-            Resource: !GetAtt DirectSQS.Arn
+            Resource: !GetAtt CodebuildEventRuleSQS.Arn
       Queues:
-        - Ref: DirectSQS
+        - Ref: CodebuildEventRuleSQS
 
-  MyNewEventsRule:
+  CodebuildEventRule:
     Type: 'AWS::Events::Rule'
     Properties:
-      Description: Test Events Rule
-      Name: test-codebuild-rule
+      Description: EventRule for Codebuild
+      Name: codebuild-rule
       EventPattern:
         source:
           - aws.codebuild
@@ -97,14 +73,12 @@ Resources:
           - CodeBuild Build Phase Change
         detail:
           completed-phase-status:
-            - STOPPED
             - FAILED
-            - TIMED_OUT
-            - FAULT
-            - CLIENT_ERROR
           project-name:
-            - TestProject
+            - sam-gradual-deploy
+          completed-phase:
+            - POST_BUILD
       State: ENABLED
       Targets:
-        - Arn: !GetAtt DirectSQS.Arn
+        - Arn: !GetAtt CodebuildEventRuleSQS.Arn
           Id: 'SQSqueue'
