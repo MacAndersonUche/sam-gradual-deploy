@@ -13,6 +13,7 @@ export const handler = async (event: SNSEvent) => {
     //5th step using the project name and the aws-sdk create a build for codebuild
     await createBuildClient('sam-gradual-deploy');
 
+    console.log('JSJSJS');
     return {
       statusCode: 200,
       body: JSON.stringify({
