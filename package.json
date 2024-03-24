@@ -21,7 +21,6 @@
     "start-ts": "node node_modules/typescript/bin/tsc -w --preserveWatchOutput",
     "start": "npm-run-all --parallel start-clear start-ts start-sam",
     "build": "node node_modules/typescript/bin/tsc",
-    "build-test": "node node_modules/typescript/bin/tsc --noEmit",
     "run": "node dist/index.js",
     "compile": "tsc",
     "test": "vitest --config ./vitest-config.mts",

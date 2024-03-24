@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: trigger-rebuild
-      Handler: dist/handlers/handle-redeploy/index.handler
+      Handler: dist/handle-redeploy/index.handler
       Description: Makes sure the api key used is valid
       Policies:
         - Statement:
