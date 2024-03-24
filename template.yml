@@ -37,6 +37,10 @@ Resources:
                 - ssm:GetParameters
                 - ssm:GetParameter
               Resource: arn:aws:ssm:eu-west-2:725638684424:*
+            - Effect: Allow
+              Action:
+                - codebuild:StartBuild
+              Resource: arn:aws:codebuild:eu-west-2:725638684424:*
       Environment:
         Variables:
           GITHUB_ACCESS_TOKEN: '{{resolve:ssm:/service/mac-github-token:1}}'
@@ -47,7 +51,6 @@ Resources:
             Queue: !GetAtt CodebuildEventRuleSQS.Arn
             BatchSize: 1
 
-  # Allow EventBridge to invoke SQS
   EventBridgeToToSqsPolicy:
     Type: AWS::SQS::QueuePolicy
     Properties:
