@@ -14,7 +14,6 @@ export const handler = async (event: SQSEvent) => {
 
     //TO DO: SEND NOTIFICATION TO SLACK
 
-    //TO revert
     return {
       statusCode: 200,
     };
