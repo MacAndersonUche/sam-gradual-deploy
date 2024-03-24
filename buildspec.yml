@@ -13,12 +13,12 @@ phases:
   build:
     commands:
       # Use AWS SAM to package the application by using AWS CloudFormation
-      - aws cloudformation package --template template.yml --s3-bucket traced-playground --s3-prefix test-deploy --output-template template-export.yml
+      - aws cloudformation package --template template.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --output-template template-export.yml
   post_build:
     on-failure: ABORT
     commands:
       # Deploy the new stack replacing all the code etc
-      - aws cloudformation deploy --template template-export.yml --s3-bucket traced-playground --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
+      - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
       - npm run test
 artifacts:
   type: zip
