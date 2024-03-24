@@ -12,7 +12,7 @@ export const handler = async (event: SQSEvent) => {
 
     await createBuildClient(projectName);
 
-    //TO DO: SEND NOTIFICATION TO SLACK
+    //TO DO: SEND NOTIFICATION TO SLACK xxxx
 
     return {
       statusCode: 200,
