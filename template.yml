@@ -11,42 +11,42 @@ Globals:
     Tracing: Active
 
 Resources:
-  FailureSQS:
-    Type: AWS::SQS::Queue
-    Properties:
-      VisibilityTimeout: 120
-
   DirectSQS:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 120
 
-  # Define the SNS topic
-  CodebuildFailureTopic:
-    Type: AWS::SNS::Topic
+  DirectSQSDLQ:
+    Type: AWS::SQS::Queue
     Properties:
-      Subscription:
-        - Protocol: sqs
-          Endpoint: !GetAtt FailureSQS.Arn
+      VisibilityTimeout: 120
+
+  # Define the SNS topic
+  # CodebuildFailureTopic:
+  #   Type: AWS::SNS::Topic
+  #   Properties:
+  #     Subscription:
+  #       - Protocol: sqs
+  #         Endpoint: !GetAtt FailureSQS.Arn
 
   # Policy allows SNS to publish to this SQS queue
-  SnsToSqsPolicy:
-    Type: AWS::SQS::QueuePolicy
-    Properties:
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: 'Allow SNS publish to SQS'
-            Effect: Allow
-            Principal:
-              Service: 'sns.amazonaws.com'
-            Resource: !GetAtt FailureSQS.Arn
-            Action: SQS:SendMessage
-            Condition:
-              ArnEquals:
-                aws:SourceArn: !Ref CodebuildFailureTopic
-      Queues:
-        - Ref: FailureSQS
+  # SnsToSqsPolicy:
+  #   Type: AWS::SQS::QueuePolicy
+  #   Properties:
+  #     PolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Sid: 'Allow SNS publish to SQS'
+  #           Effect: Allow
+  #           Principal:
+  #             Service: 'sns.amazonaws.com'
+  #           Resource: !GetAtt FailureSQS.Arn
+  #           Action: SQS:SendMessage
+  #           Condition:
+  #             ArnEquals:
+  #               aws:SourceArn: !Ref CodebuildFailureTopic
+  #     Queues:
+  #       - Ref: FailureSQS
 
   TriggerRebuild:
     Type: AWS::Serverless::Function
@@ -68,7 +68,7 @@ Resources:
         MySQSEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt FailureSQS.Arn
+            Queue: !GetAtt DirectSQS.Arn
             BatchSize: 1
 
   # Allow EventBridge to invoke SQS
