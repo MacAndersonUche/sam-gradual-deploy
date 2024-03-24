@@ -82,24 +82,11 @@ async function mergeRevertedPullRequestByID(id: string) {
 export async function handleGithub(repoName: string) {
   const lastMergedPRID = await fetchPullRequestsIDByRepoName(repoName);
 
-  console.log({ lastMergedPRID });
-
   await revertLastMergedPullRequestByID(lastMergedPRID);
-
-  console.log({ revertedPullRequestID: JSON.stringify(lastMergedPRID) });
 
   const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
 
-  console.log({ typeoffdata: typeof merged?.data });
-  console.log({
-    mergePullRequest: merged?.data?.mergePullRequest,
-  });
-  console.log({
-    typeoffmergePullRequest: typeof merged?.data?.mergePullRequest,
-  });
-  console.log({ state: merged?.data?.mergePullRequest?.pullRequest?.state });
+  console.log({ merged: JSON.stringify(merged) });
 
-  return merged.data.mergePullRequest.pullRequest.state === 'MERGED'
-    ? true
-    : false;
+  return merged.pullRequest.state === 'MERGED' ? true : false;
 }
