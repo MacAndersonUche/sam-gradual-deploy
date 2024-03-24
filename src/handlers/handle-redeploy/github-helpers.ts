@@ -67,7 +67,7 @@ async function mergeRevertedPullRequestByID(id: string) {
 
   const responseData = await graphqlClient(graphqlQuery);
 
-  return responseData;
+  return responseData.data;
 }
 
 /**
@@ -82,15 +82,21 @@ async function mergeRevertedPullRequestByID(id: string) {
 export async function handleGithub(repoName: string) {
   const lastMergedPRID = await fetchPullRequestsIDByRepoName(repoName);
 
+  console.log({ lastMergedPRID });
+
   await revertLastMergedPullRequestByID(lastMergedPRID);
 
-  const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
+  console.log({ revertedPullRequestID: JSON.stringify(lastMergedPRID) });
+
+  const { data } = await mergeRevertedPullRequestByID(lastMergedPRID);
 
   console.log({
-    merged: JSON.stringify(merged),
-    mergedUnString: merged,
-    mergedRe: merged.mergePullRequest,
+    merged: JSON.stringify(data),
+    mergedUnString: data,
+    mergedRe: data.mergePullRequest,
+    pullRe: data.mergePullRequest.pullRequest,
+    state: data.mergePullRequest.pullRequest.state,
   });
 
-  return merged.mergePullRequest === 'MERGED' ? true : false;
+  return data.mergePullRequest === 'MERGED' ? true : false;
 }
