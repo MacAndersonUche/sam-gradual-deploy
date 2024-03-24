@@ -71,7 +71,7 @@ async function mergeRevertedPullRequestByID(id: string) {
   return responseData;
 }
 
-//TO REMOVE NOW
+//TO REMOVE NOW XX
 /**
  * 
 //2nd step reach out to github and find the atest opened PR ID using the project name
