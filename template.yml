@@ -16,6 +16,11 @@ Resources:
     Properties:
       VisibilityTimeout: 120
 
+  DirectSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 120
+
   # Define the SNS topic
   CodebuildFailureTopic:
     Type: AWS::SNS::Topic
@@ -63,23 +68,40 @@ Resources:
         MySQSEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt FailureSQS.Arn
+            Queue: !GetAtt DirectSQS.Arn
             BatchSize: 1
 
-  # MyNewEventsRule:
-  #   Type: 'AWS::Events::Rule'
-  #   Properties:
-  #     Description: Test Events Rule
-  #     Name: mynewabc
-  #     EventPattern:
-  #       source:
-  #         - aws.ec2
-  #     State: ENABLED
-  #     Targets:
-  #       - Arn: 'arn:aws:sqs:us-west-2:081035103721:demoSQS'
-  #         Id: Id1234
-  #         RetryPolicy:
-  #           MaximumRetryAttempts: 4
-  #           MaximumEventAgeInSeconds: 400
-  #         DeadLetterConfig:
-  #           Arn: 'arn:aws:sqs:us-west-2:081035103721:demoDLQ'
+  # Allow EventBridge to invoke SQS
+  EventBridgeToToSqsPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: SQS:SendMessage
+            Resource: !GetAtt DirectSQS.Arn
+      Queues:
+        - Ref: DirectSQS
+
+  MyNewEventsRule:
+    Type: 'AWS::Events::Rule'
+    Properties:
+      Description: Test Events Rule
+      Name: test-codebuild-rule
+      EventPattern:
+        source:
+          - aws.codebuild
+        detail-type:
+          - CodeBuild Build Phase Change
+        detail:
+          completed-phase-status:
+            - STOPPED
+            - FAILED
+          project-name:
+            - TestProject
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt DirectSQS.Arn
+          Id: 'SQSqueue'

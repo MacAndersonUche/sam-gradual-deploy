@@ -1,8 +1,7 @@
 import { SQSEvent } from 'aws-lambda';
 import { handleGithub } from './github-helpers';
 import { createBuildClient } from './codebuild-helpers';
-import dotenv from 'dotenv';
-dotenv.config();
+require('dotenv').config();
 
 export const handler = async (event: SQSEvent) => {
   try {
