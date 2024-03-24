@@ -56,7 +56,7 @@ async function mergeRevertedPullRequestByID(id: string) {
   const graphqlQuery = JSON.stringify({
     query: `mutation {
       mergePullRequest(input: {
-        pullRequestId: "${id}",
+        pullRequestId: ${id},
       }) {
       pullRequest {
 			state
@@ -90,5 +90,7 @@ export async function handleGithub(repoName: string) {
 
   const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
 
-  return merged.pullRequest.state === 'MERGED' ? true : false;
+  console.log({ merged: JSON.stringify(merged) });
+
+  return merged === 'MERGED' ? true : false;
 }
