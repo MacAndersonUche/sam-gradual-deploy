@@ -38,6 +38,7 @@ async function revertPullRequest() {
     }`,
   });
 
+  console.log('HEEYEYEYE');
   const response = await fetch('https://api.github.com/graphql', {
     method: 'POST',
     headers: {
