@@ -7,9 +7,7 @@ async function graphqlClient(graphqlQuery: string) {
     },
     body: graphqlQuery,
   });
-
-  const responseData = await response.json();
-  if (responseData.ok) {
+  if (response.ok) {
     const data = await response.json();
     return data;
   }
@@ -40,16 +38,18 @@ async function revertLastMergedPullRequestByID(id: string) {
   const graphqlQuery = JSON.stringify({
     query: `mutation {
       revertPullRequest(input: {
-        pullRequestId: ${id},
+        pullRequestId: "${id}",
       }) {
-      revertPullRequest {
-			node_id
+      pullRequest {
+			id
 		}
       }
     }`,
   });
 
   const responseData = await graphqlClient(graphqlQuery);
+
+  console.log({ responseData: JSON.stringify(responseData) });
 
   return responseData;
 }
