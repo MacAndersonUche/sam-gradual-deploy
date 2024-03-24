@@ -32,7 +32,7 @@ export const handler = async (event: APIGatewayEvent) => {
         hi: 'here',
         // id,
         sourceIp: event.requestContext.identity.sourceIp,
-        message: 'still showing',
+        // message: 'still showing',
       }),
     };
   } catch (e) {
