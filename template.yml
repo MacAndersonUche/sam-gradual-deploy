@@ -17,6 +17,9 @@ Globals:
         CUSTOMERS_TABLE: customers
 
 Resources:
+  FailureSQS:
+    Type: AWS::SQS::Queue
+
   ExperimentApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -31,16 +34,27 @@ Resources:
     Type: AWS::SNS::Topic
     Properties:
       Subscription:
-        - Protocol: lambda
-          Endpoint: !GetAtt RevertAndMergeMRAndTriggerRebuild.Arn
+        - Protocol: sqs
+          Endpoint: !GetAtt FailureSQS.Arn
 
-  # Provide permission for SNS to invoke the Lambda function
-  CodebuildFailurePermission:
-    Type: 'AWS::Lambda::Permission'
+  # Policy allows SNS to publish to this SQS queue
+  SnsToSqsPolicy:
+    Type: AWS::SQS::QueuePolicy
     Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName: !Ref RevertAndMergeMRAndTriggerRebuild
-      Principal: sns.amazonaws.com
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: 'Allow SNS publish to SQS'
+            Effect: Allow
+            Principal:
+              Service: 'sns.amazonaws.com'
+            Resource: !GetAtt FailureSQS.Arn
+            Action: SQS:SendMessage
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref CodebuildFailureTopic
+      Queues:
+        - Ref: FailureSQS
 
   ExperimentGetFunction:
     Type: AWS::Serverless::Function
@@ -73,10 +87,11 @@ Resources:
         Variables:
           GITHUB_ACCESS_TOKEN: '{{resolve:ssm:/service/mac-github-token:1}}'
       Events:
-        SNSEvent:
-          Type: SNS
+        MySQSEvent:
+          Type: SQS
           Properties:
-            Topic: !Ref CodebuildFailureTopic
+            Queue: !GetAtt FailureSQS.Arn
+            BatchSize: 1
 
 Outputs:
   ApiDefaultEndpoint:
