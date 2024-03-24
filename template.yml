@@ -6,7 +6,7 @@ Description: >
 Globals:
   Function:
     MemorySize: 1048
-    Timeout: 120
+    Timeout: 60
     Runtime: nodejs20.x
     Tracing: Active
     Environment:
@@ -19,6 +19,8 @@ Globals:
 Resources:
   FailureSQS:
     Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 120
 
   ExperimentApi:
     Type: AWS::Serverless::Api
