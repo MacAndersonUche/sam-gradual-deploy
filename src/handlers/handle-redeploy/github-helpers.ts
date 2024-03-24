@@ -89,8 +89,8 @@ export async function handleGithub(repoName: string) {
   console.log({
     merged: JSON.stringify(merged),
     mergedUnString: merged,
-    mergedRe: merged.mergePullRequest.pullRequest.state,
+    mergedRe: merged.mergePullRequest,
   });
 
-  return merged.mergePullRequest.pullRequest.state === 'MERGED' ? true : false;
+  return merged.mergePullRequest === 'MERGED' ? true : false;
 }
