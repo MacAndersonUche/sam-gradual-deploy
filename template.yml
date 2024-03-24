@@ -62,6 +62,16 @@ Resources:
       FunctionName: 'revert-and-trigger-rebuild'
       Handler: dist/handlers/revert/index.handler
       Description: Makes sure the api key used is valid
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameters
+                - ssm:GetParameter
+              Resource: arn:aws:ssm:eu-west-2:725638684424:*
+      Environment:
+        Variables:
+          GITHUB_ACCESS_TOKEN: '{{resolve:ssm:/service/mac-github-token:1}}'
       Events:
         SNSEvent:
           Type: SNS

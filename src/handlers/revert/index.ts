@@ -1,15 +1,9 @@
 import { SNSEvent } from 'aws-lambda';
 require('dotenv').config();
 
-async function fetchPullRequests() {
-  //     curl -L \
-  //   -H "Accept: application/vnd.github+json" \
-  //   -H "Authorization: Bearer <YOUR-TOKEN>" \
-  //   -H "X-GitHub-Api-Version: 2022-11-28" \
-  //   https://api.github.com/repos/OWNER/REPO/pulls
-
+async function fetchPullRequestsID() {
   const response = await fetch(
-    'https://api.github.com/repos/MacAndersonUche/sam-gradual-deploy/pulls?state=all',
+    'https://api.github.com/repos/MacAndersonUche/sam-gradual-deploy/pulls?state=open',
     {
       method: 'GET',
       headers: {
@@ -22,12 +16,13 @@ async function fetchPullRequests() {
 
   if (response.ok) {
     const data = await response.json();
+    if (data.length > 0) return data[0].id;
     return data;
   }
   throw response.status;
 }
 
-fetchPullRequests().then((res) => console.log({ res }));
+fetchPullRequestsID().then((res) => console.log({ res }));
 export const handler = async (event: SNSEvent) => {
   try {
     //1st step get the project name from SNS
