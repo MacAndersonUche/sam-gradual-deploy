@@ -1,5 +1,5 @@
 import { SNSEvent } from 'aws-lambda';
-import { handleGithub } from './github-helpers';
+import { handleGithub } from './helpers';
 require('dotenv').config();
 
 export const handler = async (event: SNSEvent) => {

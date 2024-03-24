@@ -46,7 +46,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: 'sam-deploy-lambda1'
-      Handler: dist/handlers/handle-test/index.handler
+      Handler: dist/handlers/index.handler
       Description: Makes sure the api key used is valid
       Events:
         TestGetDevice:
@@ -60,7 +60,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: 'revert-and-trigger-rebuild'
-      Handler: dist/handlers/handle-deploy/index.handler
+      Handler: dist/handlers/revert/index.handler
       Description: Makes sure the api key used is valid
       Policies:
         - Statement:
