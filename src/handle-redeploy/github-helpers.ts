@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 async function graphqlClient(graphqlQuery: string) {
   const response = await fetch('https://api.github.com/graphql', {
     method: 'POST',
@@ -43,7 +41,7 @@ async function revertLastMergedPullRequestByID(id: string) {
       revertPullRequest(input: {
         pullRequestId: "${id}",
       }) {
-      pullRequest {
+      revertPullRequest  {
 			id
 		}
       }
@@ -82,18 +80,14 @@ async function mergeRevertedPullRequestByID(id: string) {
  */
 export async function handleGithub(repoName: string) {
   const lastMergedPRID = await fetchPullRequestsIDByRepoName(repoName);
-  console.log({ lastMergedPRID: JSON.stringify(lastMergedPRID) });
-  const reverted = await revertLastMergedPullRequestByID(lastMergedPRID);
 
-  console.log({ reverted: JSON.stringify(reverted) });
+  const { data } = await revertLastMergedPullRequestByID(lastMergedPRID);
 
-  const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
+  const revertedID = data.revertPullRequest.revertPullRequest.id;
 
-  console.log({ merged: JSON.stringify(merged) });
+  const merged = await mergeRevertedPullRequestByID(revertedID);
 
   return merged.data.mergePullRequest.pullRequest.state === 'MERGED'
     ? true
     : false;
 }
-
-handleGithub('sam-gradual-deploy').then((res) => console.log({ res }));
