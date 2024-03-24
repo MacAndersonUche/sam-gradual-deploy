@@ -56,7 +56,7 @@ async function mergeRevertedPullRequestByID(id: string) {
   const graphqlQuery = JSON.stringify({
     query: `mutation {
       mergePullRequest(input: {
-        pullRequestId: ${id},
+        pullRequestId: "${id}",
       }) {
       pullRequest {
 			state
@@ -67,7 +67,7 @@ async function mergeRevertedPullRequestByID(id: string) {
 
   const responseData = await graphqlClient(graphqlQuery);
 
-  return responseData.data.mergePullRequest;
+  return responseData.data;
 }
 
 /**
