@@ -88,15 +88,9 @@ export async function handleGithub(repoName: string) {
 
   console.log({ revertedPullRequestID: JSON.stringify(lastMergedPRID) });
 
-  const { data } = await mergeRevertedPullRequestByID(lastMergedPRID);
+  const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
 
-  console.log({
-    merged: JSON.stringify(data),
-    mergedUnString: data,
-    mergedRe: data.mergePullRequest,
-    pullRe: data.mergePullRequest.pullRequest,
-    state: data.mergePullRequest.pullRequest.state,
-  });
+  console.log({ merged: JSON.stringify(merged) });
 
-  return data.mergePullRequest === 'MERGED' ? true : false;
+  return merged === 'MERGED' ? true : false;
 }
