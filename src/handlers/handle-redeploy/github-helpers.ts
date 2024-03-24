@@ -67,7 +67,7 @@ async function mergeRevertedPullRequestByID(id: string) {
 
   const responseData = await graphqlClient(graphqlQuery);
 
-  return responseData.data;
+  return responseData;
 }
 
 /**
