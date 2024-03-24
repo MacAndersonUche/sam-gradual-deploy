@@ -66,7 +66,7 @@ Resources:
         SNSEvent:
           Type: SNS
           Properties:
-            Topic: !GetAtt CodebuildFailureTopic.Arn
+            Topic: !Ref CodebuildFailureTopic
 
 Outputs:
   ApiDefaultEndpoint:
