@@ -67,23 +67,28 @@ async function mergeRevertedPullRequestByID(id: string) {
 
   const responseData = await graphqlClient(graphqlQuery);
 
-  return responseData;
+  return responseData.data.mergePullRequest;
 }
 
+/**
+ * 
+//2nd step reach out to github and find the atest opened PR ID using the project name
+
+//3rd step using that PR ID, create a revertPR using GraphQL API
+
+//4th step merge the latest PR created from above
+
+ */
 export async function handleGithub(repoName: string) {
   const lastMergedPRID = await fetchPullRequestsIDByRepoName(repoName);
 
   console.log({ lastMergedPRID });
 
-  const revertedPullRequestID = await revertLastMergedPullRequestByID(
-    lastMergedPRID
-  );
+  await revertLastMergedPullRequestByID(lastMergedPRID);
 
-  console.log({ revertedPullRequestID });
+  console.log({ revertedPullRequestID: JSON.stringify(lastMergedPRID) });
 
-  const merged = await mergeRevertedPullRequestByID(revertedPullRequestID);
+  const merged = await mergeRevertedPullRequestByID(lastMergedPRID);
 
-  console.log({ merged: JSON.stringify(merged) });
-
-  return merged === 'MERGED' ? true : false;
+  return merged.pullRequest.state === 'MERGED' ? true : false;
 }
