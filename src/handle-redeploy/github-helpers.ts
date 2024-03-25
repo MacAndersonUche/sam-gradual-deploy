@@ -76,7 +76,7 @@ async function mergeRevertedPullRequestByID(id: string) {
  * 
 //2nd step reach out to github and find the atest opened PR ID using the project name
 //3rd step using that PR ID, create a revertPR using GraphQL API
-//4th step merge the latest PR created from above
+//4th step merge the latest PR created from above 1
  */
 export async function handleGithub(repoName: string) {
   const lastMergedPRID = await fetchPullRequestsIDByRepoName(repoName);
