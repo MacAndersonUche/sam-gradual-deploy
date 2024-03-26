@@ -1,3 +1,7 @@
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
 async function graphqlClient(graphqlQuery: string) {
   const response = await fetch('https://api.github.com/graphql', {
     method: 'POST',
@@ -16,7 +20,7 @@ async function graphqlClient(graphqlQuery: string) {
 }
 async function fetchPullRequestsIDByRepoName(repoName: string) {
   const response = await fetch(
-    `https://api.github.com/repos/MacAndersonUche/${repoName}/pulls?state=closed`,
+    `https://api.github.com/search/issues?q=repo:TracedLtd/${repoName}+is:pr+is:merged`,
     {
       method: 'GET',
       headers: {
@@ -29,7 +33,7 @@ async function fetchPullRequestsIDByRepoName(repoName: string) {
 
   if (response.ok) {
     const data = await response.json();
-    if (data.length > 0) return data[0].node_id;
+    if (data.total_count > 0) return data.items[0].html_url;
     return data;
   }
   throw response.status;
