@@ -15,7 +15,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const workflow_id = "e2e-tests-pipeline.yml";
-            const run = await github.actions.createWorkflowDispatch({
+            const run =  github.rest.actions.createWorkflowDispatch({
               owner,
               repo: "control-e2e-tests",
               workflow_id,
