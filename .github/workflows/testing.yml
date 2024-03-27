@@ -6,9 +6,7 @@ on:
 
 jobs:
   testing-using-app:
-    runs-on: [self-hosted, generic-linux]
-    container:
-      image: ubuntu:focal-20220302
+    runs-on: ubuntu-18.04
     steps:
       - name: Process private key
         id: process-private-key
@@ -19,4 +17,4 @@ jobs:
         id: app-token
         with:
           github_app_id: ${{ vars.APP_ID }}
-          github_app_private_key: ${{ secrets.PRIVATE_KEY }}
+          github_app_private_key: ${{  secrets.PRIVATE_KEY }}
