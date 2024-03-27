@@ -1,0 +1,22 @@
+name: Trigger E2E Test Workflow
+on:
+  push:
+    branches:
+      - masterx
+
+jobs:
+  trigger-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Trigger E2E Test'
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: TracedLtd
+          repo: Control-E2E-Tests
+          github_token: ${{ secrets.GH_ACCESS_TOKEN }}
+          github_user: MacAndersonUche
+          workflow_file_name: e2e-tests-pipeline.yml
+          wait_interval: 30
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true

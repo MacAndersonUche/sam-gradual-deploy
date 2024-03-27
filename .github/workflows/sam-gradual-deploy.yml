@@ -5,7 +5,7 @@ on:
     branches:
       - mainx
 jobs:
-  build-deploy-dev:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
