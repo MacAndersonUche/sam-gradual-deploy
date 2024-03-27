@@ -9,25 +9,36 @@ jobs:
         with:
           repository: TracedLtd/control-e2e-tests
           token: ${{ secrets.GH_ACCESS_TOKEN }}
-      - name: Dispatch an action and get the run ID
-        uses: codex-/return-dispatch@v1
-        id: return_dispatch
+      - name: 'Trigger B'
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
         with:
-          ref: 'main'
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-          repo: Control-E2E-Tests
           owner: TracedLtd
-          workflow: e2e-tests-pipeline.yml
-      - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
-        uses: Codex-/await-remote-run@v1.0.0
-        with:
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
           repo: Control-E2E-Tests
-          owner: TracedLtd
-          run_id: ${{ steps.return_dispatch.outputs.run_id }}
-          run_timeout_seconds: 300 # Optional
-          poll_interval_ms: 5000 # Optional
-
+          github_token: ${{ secrets.GH_ACCESS_TOKEN }}
+          github_user: MacAndersonUche
+          workflow_file_name: e2e-tests-pipeline.yml
+          wait_interval: 30
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true
+    #   - name: Dispatch an action and get the run ID
+    #     uses: codex-/return-dispatch@v1
+    #     id: return_dispatch
+    #     with:
+    #       ref: 'main'
+    #       token: ${{ secrets.GH_ACCESS_TOKEN }}
+    #       repo: Control-E2E-Tests
+    #       owner: TracedLtd
+    #       workflow: e2e-tests-pipeline.yml
+    #   - name: Await Run ID ${{ steps.return_dispatch.outputs.run_id }}
+    #     uses: Codex-/await-remote-run@v1.0.0
+    #     with:
+    #       token: ${{ secrets.GH_ACCESS_TOKEN }}
+    #       repo: Control-E2E-Tests
+    #       owner: TracedLtd
+    #       run_id: ${{ steps.return_dispatch.outputs.run_id }}
+    #       run_timeout_seconds: 300 # Optional
+    #       poll_interval_ms: 5000 # Optional
 
     #   - name: Trigger Repo B Workflow
     #     uses: actions/github-script@v6
