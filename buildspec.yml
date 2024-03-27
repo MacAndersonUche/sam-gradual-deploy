@@ -11,6 +11,7 @@ phases:
     commands:
       # Install all dependencies (including dependencies for running tests)
       - echo "GITHUB_ACCESS_TOKEN - $ACCESS_TOKEN"
+      - echo "PASSING ENV - $test-passing-env"
       - npm install
   pre_build:
     commands:
@@ -34,7 +35,7 @@ phases:
         with:
           owner: TracedLtd
           repo: Control-E2E-Tests
-          github_token: $GITHUB_ACCESS_TOKEN
+          github_token: $ACCESS_TOKEN
           github_user: MacAndersonUche
           workflow_file_name: e2e-tests-pipeline.yml
           wait_interval: 30

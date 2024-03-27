@@ -24,6 +24,8 @@ jobs:
         with:
           project-name: sam-gradual-deploy
           env-vars-for-codebuild: |
-            gh-token
+            gh-token,
+            test-passing-env
         env:
-          gh-token: 'hey working token'
+          gh-token: ${{ secrets.GH_ACCESS_TOKEN }}
+          test-passing-env: 'Hey'
