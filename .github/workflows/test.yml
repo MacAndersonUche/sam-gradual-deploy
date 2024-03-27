@@ -1,5 +1,6 @@
 name: Repo A Workflow
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   trigger-repo-b-workflow:

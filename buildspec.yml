@@ -1,8 +1,8 @@
 version: 0.2
 
-# env:
-#   parameter-store:
-#     GITHUB_ACCESS_TOKEN: '/service/mac-github-token'
+env:
+  parameter-store:
+    GITHUB_ACCESS_TOKEN: '/service/mac-github-token'
 
 phases:
   install:
@@ -41,7 +41,6 @@ phases:
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
-    ## IF Test passes create tag??
 artifacts:
   type: zip
   files:
