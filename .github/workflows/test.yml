@@ -12,12 +12,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 19
+      - name: Process private key
+        id: process-private-key
+        run: |
+          PROCESSED_PRIVATE_KEY=$(echo "${{ secrets.PRIVATE_KEY }}" | sed 's/\\n/\n/g')
+          echo "PROCESSED_PRIVATE_KEY=$PROCESSED_PRIVATE_KEY" >> $GITHUB_ENV
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          # required
           app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.PRIVATE_KEY }}
+          private-key: ${{ env.PROCESSED_PRIVATE_KEY }}
     #   - name: 'Trigger E2E Test'
     #     uses: convictional/trigger-workflow-and-wait@v1.6.1
     #     with:
