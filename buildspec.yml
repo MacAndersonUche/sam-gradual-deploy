@@ -8,11 +8,11 @@ phases:
   install:
     runtime-versions:
       nodejs: 20
-      commands:
-        # Install all dependencies (including dependencies for running tests)
-        - echo "GITHUB_ACCESS_TOKEN - $ACCESS_TOKEN"
-        - echo "PASSING ENV - $test-passing-env"
-        - npm install
+    commands:
+      # Install all dependencies (including dependencies for running tests)
+      - echo "GITHUB_ACCESS_TOKEN - $ACCESS_TOKEN"
+      - echo "PASSING ENV - $test-passing-env"
+      - npm install
   pre_build:
     # commands:
     #   # this is typescript so we need to compile it to JS first
