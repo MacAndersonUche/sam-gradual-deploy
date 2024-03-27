@@ -23,7 +23,6 @@ phases:
       - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
   post_build:
     on-failure: ABORT
-    commands:
     steps:
       #   - id: fetch-latest-release
       #     uses: thebritican/fetch-latest-release@v1
