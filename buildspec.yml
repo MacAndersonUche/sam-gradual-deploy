@@ -1,9 +1,5 @@
 version: 0.2
 
-# env:
-#   parameter-store:
-#     ACCESS_TOKEN: '/service/mac-github-token'
-
 phases:
   install:
     runtime-versions:
@@ -25,6 +21,18 @@ phases:
               workflow_id: "test.yml",
               ref: "master", // or any other branch you want to trigger
             });
+      - name: 'Trigger E2E Test Workflow'
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: TracedLtd
+          repo: Control-E2E-Tests
+          github_token: $gh-token
+          github_user: MacAndersonUche
+          workflow_file_name: e2e-tests-pipeline.yml
+          wait_interval: 30
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true
   # build:
   #   commands:
   #     # Use AWS SAM to package the application by using AWS CloudFormation
@@ -33,19 +41,6 @@ phases:
   #     - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
   # post_build:
   #   on-failure: ABORT
-  #   steps:
-  # - name: 'Trigger E2E Test Workflow'
-  #   uses: convictional/trigger-workflow-and-wait@v1.6.1
-  #   with:
-  #     owner: TracedLtd
-  #     repo: Control-E2E-Tests
-  #     github_token: $ACCESS_TOKEN
-  #     github_user: MacAndersonUche
-  #     workflow_file_name: e2e-tests-pipeline.yml
-  #     wait_interval: 30
-  #     propagate_failure: true
-  #     trigger_workflow: true
-  #     wait_workflow: true
 artifacts:
   type: zip
   files:
