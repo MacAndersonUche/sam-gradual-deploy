@@ -21,6 +21,14 @@ jobs:
             });
           github-token: ${{ secrets.GH_ACCESS_TOKEN }}
 
+      - name: Wait for Repo B Workflow to complete
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: 'main'
+          check-name: 'e2e-tests-pipeline'
+          repo-token: ${{ secrets.GH_ACCESS_TOKEN }}
+          wait-interval: 60 # Poll every 60 seconds
+
       - name: Check Repo B Workflow Status
         uses: actions/github-script@v6
         with:
