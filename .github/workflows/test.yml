@@ -25,12 +25,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const run = github.rest.actions.listWorkflowRuns({
-              owner: "TracedLtd",
-              repo: "Control-E2E-Tests",
-              workflow_id: "e2e-tests-pipeline.yml",
+            const run = await github.rest.actions.listWorkflowRuns({
+              owner: 'TracedLtd',
+              repo: 'Control-E2E-Tests',
+              workflow_id: 'e2e-tests-pipeline.yml',
               per_page: 1,
             });
             if (run.data.status !== "completed" || run.data.conclusion !== "success") {
               throw new Error("Repo B workflow failed");
             }
+          github-token: ${{ secrets.GH_ACCESS_TOKEN }}
