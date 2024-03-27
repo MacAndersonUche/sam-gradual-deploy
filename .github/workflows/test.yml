@@ -24,8 +24,9 @@ jobs:
       - name: Wait for Repo B Workflow to complete
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
-          ref: 'main'
-          check-name: 'e2e-tests-pipeline'
+          ref: 'master'
+          #   check-name: 'e2e-tests-pipeline'
+          running-workflow-name: 'Run E2E Tests'
           repo-token: ${{ secrets.GH_ACCESS_TOKEN }}
           wait-interval: 60 # Poll every 60 seconds
 
