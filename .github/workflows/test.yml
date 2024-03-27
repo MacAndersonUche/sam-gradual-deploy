@@ -1,0 +1,38 @@
+name: Repo A Workflow
+on: [push]
+jobs:
+  trigger-repo-b-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo B
+        uses: actions/checkout@v2
+        with:
+          repository: <owner>/<repo-b-name>
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Trigger Repo B Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflow_id = "e2e-tests-pipeline.yml";
+            const run = await github.actions.createWorkflowDispatch({
+              owner,
+              repo: "control-e2e-tests",
+              workflow_id,
+              ref: "main", // or any other branch you want to trigger
+            });
+            console.log(`Triggered workflow run: ${run.data.id}`);
+      - name: Check Repo B Workflow Status
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run_id = "<workflow-run-id-from-previous-step>";
+            const run = await github.actions.getWorkflowRun({
+              owner,
+              repo: "<repo-b-name>",
+              run_id,
+            });
+            if (run.data.status !== "completed" || run.data.conclusion !== "success") {
+              throw new Error("Repo B workflow failed");
+            }

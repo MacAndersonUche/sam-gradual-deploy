@@ -8,6 +8,7 @@
     "@aws-sdk/lib-dynamodb": "^3.515.0",
     "@types/aws-lambda": "^8.10.101",
     "@types/node": "^20.11.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
