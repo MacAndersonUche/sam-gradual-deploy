@@ -4,7 +4,7 @@ require('dotenv').config();
 const fs = require('fs');
 async function triggerGithubWorkflow() {
   const url =
-    'https://api.github.com/repos/TracedLtd/control-e2e-tests/actions/workflows/e2e-tests-pipeline.yml/dispatches';
+    'https://api.github.com/repos/TracedLtd/Control-E2E-Tests/actions/workflows/e2e-tests-pipeline.yml/dispatches';
   const headers = {
     Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
     Accept: 'application/vnd.github.v3+json',
