@@ -15,7 +15,7 @@ jobs:
           github-token: ${{ secrets.GH_ACCESS_TOKEN }}
         with:
           script: |
-            github.rest.actions.createWorkflowDispatch({
+            await github.rest.actions.createWorkflowDispatch({
               owner: "TracedLtd",
               repo: "Control-E2E-Tests",
               workflow_id: "e2e-tests-pipeline.yml",
