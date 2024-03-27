@@ -26,4 +26,4 @@ jobs:
           env-vars-for-codebuild: |
             gh-token
         env:
-          gh-token: ${{ secrets.GH_ACCESS_TOKEN }}
+          gh-token: 'hey working token'
