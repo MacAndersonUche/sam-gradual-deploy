@@ -13,12 +13,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { owner, repo } = context.repo;
-            const workflow_id = "e2e-tests-pipeline.yml";
             const run =  github.rest.actions.createWorkflowDispatch({
-              owner,
+              owner: "TracedLtd",
               repo: "control-e2e-tests",
-              workflow_id,
+              workflow_id: "e2e-tests-pipeline.yml",
               ref: "main", // or any other branch you want to trigger
             });
             console.log(`Triggered workflow run: ${run.data.id}`);
@@ -26,12 +24,11 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { owner, repo } = context.repo;
-            const run_id = "<workflow-run-id-from-previous-step>";
-            const run = await github.actions.getWorkflowRun({
-              owner,
+            const run = github.rest.actions.listWorkflowRuns({
+              owner: "TracedLtd",
               repo: "control-e2e-tests",
-              run_id,
+              workflow_id: "e2e-tests-pipeline.yml",
+              per_page: 1,
             });
             if (run.data.status !== "completed" || run.data.conclusion !== "success") {
               throw new Error("Repo B workflow failed");
