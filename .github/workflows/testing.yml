@@ -11,10 +11,15 @@ jobs:
       - name: Process private key
         id: process-private-key
         run: |
-          PROCESSED_PRIVATE_KEY=$(echo "${{ secrets.PRIVATE_KEY }}" | tr -d '\r' | sed 's/\\n/\n/g')
-          echo "PROCESSED_PRIVATE_KEY=$PROCESSED_PRIVATE_KEY" >> $GITHUB_ENV
-      - uses: cybozu/octoken-action@v1
+          echo "${{ secrets.PRIVATE_KEY }}" | base64 --decode > github_private_key.pem
+          echo "export GITHUB_PRIVATE_KEY=$(cat github_private_key.pem)" >> $GITHUB_ENV
+
+      - name: Debug private key
+        run: echo $GITHUB_PRIVATE_KEY
+
+      - name: Setup octoken
+        uses: cybozu/octoken-action@v1
         id: app-token
         with:
           github_app_id: ${{ vars.APP_ID }}
-          github_app_private_key: ${{  env.PROCESSED_PRIVATE_KEY }}
+          github_app_private_key: ${{ env.GITHUB_PRIVATE_KEY }}
