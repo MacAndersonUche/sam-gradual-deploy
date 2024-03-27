@@ -11,9 +11,11 @@ jobs:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: Trigger Repo B Workflow
         uses: actions/github-script@v6
+        env:
+          github-token: ${{ secrets.GH_ACCESS_TOKEN }}
         with:
           script: |
-            await github.rest.actions.createWorkflowDispatch({
+            github.rest.actions.createWorkflowDispatch({
               owner: "TracedLtd",
               repo: "Control-E2E-Tests",
               workflow_id: "e2e-tests-pipeline.yml",
