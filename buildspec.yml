@@ -1,8 +1,8 @@
 version: 0.2
 
-env:
-  parameter-store:
-    ACCESS_TOKEN: '/service/mac-github-token'
+# env:
+#   parameter-store:
+#     ACCESS_TOKEN: '/service/mac-github-token'
 
 phases:
   install:
@@ -22,6 +22,17 @@ phases:
         uses: thebritican/fetch-latest-release@v1
         with:
           github_token: $ACCESS_TOKEN
+
+      - name: Trigger Repo B Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: "MacAndersonUche",
+              repo: "sam-gradual-deploy",
+              workflow_id: "test.yml",
+              ref: "main", // or any other branch you want to trigger
+            });
   # build:
   #   commands:
   #     # Use AWS SAM to package the application by using AWS CloudFormation
