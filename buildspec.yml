@@ -23,7 +23,7 @@ phases:
               owner: "MacAndersonUche",
               repo: "sam-gradual-deploy",
               workflow_id: "test.yml",
-              ref: "main", // or any other branch you want to trigger
+              ref: "master", // or any other branch you want to trigger
             });
   # build:
   #   commands:
