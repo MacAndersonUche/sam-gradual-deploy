@@ -25,6 +25,8 @@ jobs:
     needs: process-private-key
     runs-on: ubuntu-latest
     steps:
+      - name: Debug private key
+        run: 'echo Private Key: ${{ secrets.PRIVATE_KEY }}'
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
