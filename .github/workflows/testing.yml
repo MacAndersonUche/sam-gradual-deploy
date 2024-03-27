@@ -2,7 +2,7 @@ name: Using Github APP Workflow
 on:
   push:
     branches:
-      - master
+      - masterx
 
 jobs:
   testing-using-app:

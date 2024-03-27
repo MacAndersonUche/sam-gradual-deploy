@@ -15,12 +15,7 @@ phases:
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.actions.createWorkflowDispatch({
-              owner: "MacAndersonUche",
-              repo: "sam-gradual-deploy",
-              workflow_id: "test.yml",
-              ref: "master", // or any other branch you want to trigger
-            });
+            node triggerGithubWorkflow.js
       - name: 'Trigger E2E Test Workflow'
         uses: convictional/trigger-workflow-and-wait@v1.6.1
         with:
