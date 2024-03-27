@@ -7,5 +7,7 @@ export function createBuildClient(projectName: string) {
     projectName,
   };
   const command = new StartBuildCommand(input);
+
+  console.log({ command });
   return client.send(command);
 }
