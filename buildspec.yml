@@ -14,15 +14,7 @@ phases:
       - echo "PASSING ENV - $test-passing-env"
       - npm install
   pre_build:
-    # commands:
-    #   # this is typescript so we need to compile it to JS first
-    #   - npm run compile
     steps:
-      - id: fetch-latest-release
-        uses: thebritican/fetch-latest-release@v1
-        with:
-          github_token: $ACCESS_TOKEN
-
       - name: Trigger Repo B Workflow
         uses: actions/github-script@v6
         with:
@@ -42,10 +34,6 @@ phases:
   # post_build:
   #   on-failure: ABORT
   #   steps:
-  #     - id: fetch-latest-release
-  #       uses: thebritican/fetch-latest-release@v1
-  #       with:
-  #         github_token: $ACCESS_TOKEN
   # - name: 'Trigger E2E Test Workflow'
   #   uses: convictional/trigger-workflow-and-wait@v1.6.1
   #   with:
