@@ -23,3 +23,7 @@ jobs:
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: sam-gradual-deploy
+          env-vars-for-codebuild: |
+            gh-token
+        env:
+          gh-token: ${{ secrets.GH_ACCESS_TOKEN }}

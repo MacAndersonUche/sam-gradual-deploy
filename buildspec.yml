@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   parameter-store:
-    GITHUB_ACCESS_TOKEN: '/service/mac-github-token'
+    ACCESS_TOKEN: '/service/mac-github-token'
 
 phases:
   install:
@@ -10,7 +10,7 @@ phases:
       nodejs: 20
     commands:
       # Install all dependencies (including dependencies for running tests)
-      - echo "GITHUB_ACCESS_TOKEN - $GITHUB_ACCESS_TOKEN"
+      - echo "GITHUB_ACCESS_TOKEN - $ACCESS_TOKEN"
       - npm install
   pre_build:
     commands:
