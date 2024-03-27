@@ -4,12 +4,7 @@ jobs:
   trigger-repo-b-workflow:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo B
-        uses: actions/checkout@v2
-        with:
-          repository: TracedLtd/control-e2e-tests
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-      - name: 'Trigger B'
+      - name: 'Trigger E2E Test'
         uses: convictional/trigger-workflow-and-wait@v1.6.1
         with:
           owner: TracedLtd
