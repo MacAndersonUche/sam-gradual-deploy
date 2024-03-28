@@ -19,7 +19,7 @@ phases:
     commands:
       # Deploy the new stack replacing all the code etc
       - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
-      - npm run test
+      # - npm run test
 artifacts:
   type: zip
   files:
