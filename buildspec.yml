@@ -1,41 +1,25 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
       # Install all dependencies (including dependencies for running tests)
-      - echo "GITHUB_ACCESS_TOKEN - $ACCESS_TOKEN"
-      - echo "PASSING ENV - $test-passing-env"
       - npm install
   pre_build:
-    steps:
-      - name: Trigger Repo B Workflow
-        uses: actions/github-script@v6
-        with:
-          script: |
-            node triggerGithubWorkflow.js
-      - name: 'Trigger E2E Test Workflow'
-        uses: convictional/trigger-workflow-and-wait@v1.6.1
-        with:
-          owner: TracedLtd
-          repo: Control-E2E-Tests
-          github_token: $gh-token
-          github_user: MacAndersonUche
-          workflow_file_name: e2e-tests-pipeline.yml
-          wait_interval: 30
-          propagate_failure: true
-          trigger_workflow: true
-          wait_workflow: true
-  # build:
-  #   commands:
-  #     # Use AWS SAM to package the application by using AWS CloudFormation
-  #     - aws cloudformation package --template template.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --output-template template-export.yml
-  #     # Deploying AWS
-  #     - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
-  # post_build:
-  #   on-failure: ABORT
+    commands:
+      # this is typescript so we need to compile it to JS first
+      - npm run compile
+  build:
+    commands:
+      # Use AWS SAM to package the application by using AWS CloudFormation
+      - aws cloudformation package --template template.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --output-template template-export.yml
+  post_build:
+    on-failure: ABORT
+    commands:
+      # Deploy the new stack replacing all the code etc
+      - aws cloudformation deploy --template template-export.yml --s3-bucket traced-code-deploy --s3-prefix test-deploy --stack-name sam-gradual-deploy --capabilities CAPABILITY_IAM
+      - npm run test
 artifacts:
   type: zip
   files:
